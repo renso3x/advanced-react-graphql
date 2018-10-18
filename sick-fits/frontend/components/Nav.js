@@ -1,10 +1,24 @@
 import Link from 'next/link';
+import NavStyles from './styles/NavStyles';
 
 const Nav = () => (
-  <div>
-    <Link href="/"><a>Home</a></Link>
-    <Link href="/sell"><a>Sell</a></Link>
-  </div>
+  <NavStyles>
+    <Link href="/">
+      <a>Item</a>
+    </Link>
+    <Link href="/">
+      <a>Sell</a>
+    </Link>
+    <Link href="/">
+      <a>Signup</a>
+    </Link>
+    <Link href="/">
+      <a>Orders</a>
+    </Link>
+    <Link href="/">
+      <a>Me</a>
+    </Link>
+  </NavStyles>
 );
 
 export default Nav;
