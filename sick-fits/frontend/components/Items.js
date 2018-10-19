@@ -16,14 +16,15 @@ const ALL_ITEMS_QUERY = gql`
     }
   }
 `;
+
 const Center = styled.div`
   text-align: center;
 `;
 
-const ItemAlign = styled.div`
+const ItemsList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-grap: 60px;
+  grid-gap: 60px;
   max-width: {props => props.theme.maxWidth};
   margin: 0 auto;
 `;
@@ -36,9 +37,11 @@ class Items extends Component {
           {({ data, error, loading }) => {
             if (loading) <p>Loading...</p>
             if (error) <p>Error: {error}</p>
-            return <ItemAlign>
-              {data.items.map(item => <Item key={item.id} item={item} />)}
-            </ItemAlign>
+            return (
+              <ItemsList>
+                {data.items.map(item => <Item key={item.id} item={item} />)}
+              </ItemsList>
+            );
           }}
         </Query>
       </Center>
