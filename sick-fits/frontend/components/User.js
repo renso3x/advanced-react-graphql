@@ -8,7 +8,6 @@ const CURRENT_USER_QUERY = gql`
       id
       name 
       email
-      password
     }
   }
 `;

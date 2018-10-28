@@ -45,9 +45,7 @@ class Signup extends Component {
                 method="post"
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  console.log(this.state)
                   const res = await signup();
-                  console.log(res);
                 }}
               >
                 <Error error={error} />
