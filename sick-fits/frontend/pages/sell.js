@@ -1,9 +1,12 @@
+import PleaseSignin from '../components/PleaseSignin';
 import CreateItem from '../components/CreateItem';
 
 const sell = () => {
   return (
     <div>
-      <CreateItem />
+      <PleaseSignin>
+        <CreateItem />
+      </PleaseSignin>
     </div>
   )
 }
