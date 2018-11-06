@@ -13,9 +13,7 @@ const PleaseSignin = props => (
         return <Signin />
       }
       return props.children
-    }
-    }
-
+    }}
   </Query>
 )
 
