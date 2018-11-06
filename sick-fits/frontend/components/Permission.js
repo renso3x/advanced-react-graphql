@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import Error from './ErrorMessage';
 import Table from './styles/Table';
 import SickButton from './styles/SickButton';
+import PropTypes from 'prop-types';
 
 const possiblePermissions = [
   'ADMIN',
@@ -50,6 +51,34 @@ const Permission = () => (
 );
 
 class UserPermissions extends React.Component {
+  static propTypes = {
+    user: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      email: PropTypes.string,
+      permissions: PropTypes.array
+    }).isRequired
+  }
+
+  state = {
+    permissions: this.props.user.permissions
+  }
+
+  handlePermissions = (e) => {
+    const checkedbox = e.target;
+    //get a copy of users permissions
+    let updatedPermission = [...this.state.permissions];
+
+    if (checkedbox.checked) {
+      updatedPermission.push(checkedbox.value);
+    } else {
+      updatedPermission = updatedPermission.filter(permission => permission != checkedbox.value)
+    }
+    this.setState((prev, curr) => ({
+      permissions: updatedPermission
+    }))
+  }
+
   render() {
     const user = this.props.user
     return (
@@ -62,6 +91,9 @@ class UserPermissions extends React.Component {
               <input
                 id={`${user.id}-permission-${permission}`}
                 type="checkbox"
+                checked={this.state.permissions.includes(permission)}
+                value={permission}
+                onChange={this.handlePermissions}
               />
             </label>
           </td>
