@@ -26,7 +26,6 @@ server.express.use(async (req, res, next) => {
       id: req.userId
     }
   }, `{ id, name, permissions, email }`);
-
   req.user = user;
   next();
 })
