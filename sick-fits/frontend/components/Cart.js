@@ -1,6 +1,7 @@
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { adopt } from 'react-adopt';
 import CartStyles from './styles/CartStyles';
 import Supreme from './styles/Supreme';
 import SickButton from './styles/SickButton';
@@ -19,35 +20,35 @@ const TOGGLE_CART_MUTATION = gql`
   mutation {
     toggleCart @client
   }
-`
+`;
+
+const Consumer = adopt({
+  data: ({ render }) => <User>{render}</User>,
+  toggleCart: ({ render }) => <Mutation mutation={TOGGLE_CART_MUTATION}>{render}</Mutation>,
+  localState: ({ render }) => <Query query={LOCAL_STATE_QUERY}>{render}</Query>
+});
+
 const Cart = () => (
-  <User>
-    {({ data }) => {
-      if (!data.me) return null;
+  <Consumer>
+    {({ data, toggleCart, localState }) => {
+      const { me } = data.data;
+      if (!me) return null;
       return (
-        <Mutation mutation={TOGGLE_CART_MUTATION}>
-          {(toggleCart) => (
-            <Query query={LOCAL_STATE_QUERY}>
-              {({ data: { cartOpen } }) => (
-                <CartStyles open={cartOpen}>
-                  <header>
-                    <CloseButton title="close" onClick={toggleCart}>&times;</CloseButton>
-                    <Supreme>{data.me.name}'s Cart</Supreme>
-                    <p>You have {data.me.cart.length} item{data.me.cart.length === 1 ? '' : 's'} in your cart.</p>
-                  </header>
-                  {data.me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} cartId={cart.id} item={cart.item} />)}
-                  <footer>
-                    <p>{formatMoney(calcTotalPrice(data.me.cart))}</p>
-                    <SickButton>Checkout</SickButton>
-                  </footer>
-                </CartStyles>
-              )}
-            </Query>
-          )}
-        </Mutation>
+        <CartStyles open={localState.data.cartOpen}>
+          <header>
+            <CloseButton title="close" onClick={toggleCart}>&times;</CloseButton>
+            <Supreme>{me.name}'s Cart</Supreme>
+            <p>You have {me.cart.length} item{me.cart.length === 1 ? '' : 's'} in your cart.</p>
+          </header>
+          {me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} cartId={cart.id} item={cart.item} />)}
+          <footer>
+            <p>{formatMoney(calcTotalPrice(me.cart))}</p>
+            <SickButton>Checkout</SickButton>
+          </footer>
+        </CartStyles>
       )
     }}
-  </User>
+  </Consumer>
 );
 
 export default Cart;
