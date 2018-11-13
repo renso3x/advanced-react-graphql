@@ -21,6 +21,14 @@ const CartItemStyles = styled.li`
 
 const CartItem = (cart) => {
   const { quantity, item, cartId } = cart
+  if (!cart.item) {
+    return (
+      <CartItemStyles>
+        <p>Your item has been deleted.</p>
+        <RemoveCartitem id={cartId} />
+      </CartItemStyles>
+    );
+  }
   return (
     <CartItemStyles>
       <img src={item.image} style={{ height: '100px' }} />
