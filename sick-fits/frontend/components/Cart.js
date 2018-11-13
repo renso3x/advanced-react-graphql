@@ -35,7 +35,7 @@ const Cart = () => (
                     <Supreme>{data.me.name}'s Cart</Supreme>
                     <p>You have {data.me.cart.length} item{data.me.cart.length === 1 ? '' : 's'} in your cart.</p>
                   </header>
-                  {data.me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} item={cart.item} />)}
+                  {data.me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} cartId={cart.id} item={cart.item} />)}
                   <footer>
                     <p>{formatMoney(calcTotalPrice(data.me.cart))}</p>
                     <SickButton>Checkout</SickButton>
