@@ -6,6 +6,7 @@ import CartStyles from './styles/CartStyles';
 import Supreme from './styles/Supreme';
 import SickButton from './styles/SickButton';
 import CloseButton from './styles/CloseButton';
+import TakeMyMoney from './TakeMyMoney';
 import User from './User';
 import CartItem from './CartItem';
 import calcTotalPrice from '../lib/calcTotalPrice';
@@ -43,7 +44,9 @@ const Cart = () => (
           {me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} cartId={cart.id} item={cart.item} />)}
           <footer>
             <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-            <SickButton>Checkout</SickButton>
+            <TakeMyMoney>
+              <SickButton>Checkout</SickButton>
+            </TakeMyMoney>
           </footer>
         </CartStyles>
       )
