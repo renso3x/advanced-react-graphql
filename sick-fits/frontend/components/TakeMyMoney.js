@@ -8,27 +8,45 @@ import calcTotalPrice from '../lib/calcTotalPrice';
 import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY } from './User';
 
+const CREATE_ORDER_MUTATION = gql`
+  mutation CREATE_ORDER_MUTATION($token: String!) {
+    createOrder(token: $token) {
+      id
+    }
+  }
+`;
+
 function totalItems(cart) {
   return cart.reduce((tally, cartItem) => tally + cartItem.quantity, 0);
 }
 
 class TakeMyMoney extends React.Component {
-  onToken = (res) => {
-    console.log(res);
+  onToken = (res, createOrder) => {
+    createOrder({
+      variables: {
+        token: res.id
+      }
+    }).catch(err => console.log(err.message));
   }
   render() {
     return (<User>
       {({ data }, loading) => (
-        <StripeCheckout
-          stripeKey="pk_test_Y8O6nOLfQUNoKNPz5o4BNxXz"
-          amount={calcTotalPrice(data.me.cart)}
-          name="Sick Fits"
-          description={`Order of ${totalItems(data.me.cart)} items!`}
-          image={data.me.cart.length && data.me.cart[0].item.image}
-          token={res => this.onToken(res)}
+        <Mutation
+          mutation={CREATE_ORDER_MUTATION}
         >
-          {this.props.children}
-        </StripeCheckout>
+          {(createOrder) => (
+            <StripeCheckout
+              stripeKey="pk_test_Y8O6nOLfQUNoKNPz5o4BNxXz"
+              amount={calcTotalPrice(data.me.cart)}
+              name="Sick Fits"
+              description={`Order of ${totalItems(data.me.cart)} items!`}
+              image={data.me.cart.length && data.me.cart[0].item.image}
+              token={res => this.onToken(res, createOrder)}
+            >
+              {this.props.children}
+            </StripeCheckout>
+          )}
+        </Mutation>
       )}
     </User>)
   }
