@@ -24,6 +24,28 @@ const Query = {
 
     //return the list of users
     return ctx.db.query.users({}, info);
+  },
+  async order(parent, args, ctx, info) {
+    // check if user is logged in
+    if (!ctx.request.userId) {
+      throw new Error('You should be logged in!');
+    }
+    // find the order 
+    const order = await ctx.db.query.order({
+      where: {
+        id: args.id
+      }
+    }, info);
+    // check if user its order
+    const ownsOrder = order.user.id === ctx.request.userId;
+    // check if user permissions role is admin
+    const hasPermissionToSeeOrder = ctx.request.user.permissions.includes('ADMIN');
+
+    if (!ownsOrder || !hasPermissionToSeeOrder) {
+      throw new Error('Unauthorized');
+    }
+    // return the order
+    return order;
   }
   // async items(parent, args, ctx, info) {
   //   const allItems = await ctx.db.query.items();
