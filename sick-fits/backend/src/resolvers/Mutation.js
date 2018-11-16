@@ -309,6 +309,41 @@ const Mutations = {
       currency: 'USD',
       source: args.token // token from the user
     })
+
+    // 4. Convert an CartItem to OrderItems
+    const orderItems = user.cart.map(cartItem => {
+      const orderItem = {
+        ...cartItem.item,
+        quantity: cartItem.quantity,
+        user: { connect: { id: userId } }
+      };
+      delete orderItem.id;
+      return orderItem;
+    });
+
+    // 5. create the Order
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        total: charge.amount,
+        charge: charge.id,
+        items: { create: orderItems }, // prisma will create the [OrderItem!]
+        user: { connect: { id: userId } } // relationship to User
+      }
+    });
+
+    // 6. Cleanup - clear the users cart, delete Cartitems
+    const cartItemIds = user.cart.map(cartItem => cartItem.id);
+
+    await ctx.db.mutation.deleteManyCartItems({
+      where: {
+        id_in: cartItemIds
+      }
+    })
+
+    console.log(order);
+
+    // Return the order to the client
+    return order;
   }
 };
 
