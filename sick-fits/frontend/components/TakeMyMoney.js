@@ -21,18 +21,20 @@ function totalItems(cart) {
 }
 
 class TakeMyMoney extends React.Component {
-  onToken = (res, createOrder) => {
-    createOrder({
+  onToken = async (res, createOrder) => {
+    const order = await createOrder({
       variables: {
         token: res.id
       }
     }).catch(err => console.log(err.message));
+    console.log(order);
   }
   render() {
     return (<User>
       {({ data }, loading) => (
         <Mutation
           mutation={CREATE_ORDER_MUTATION}
+          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
           {(createOrder) => (
             <StripeCheckout
@@ -40,7 +42,7 @@ class TakeMyMoney extends React.Component {
               amount={calcTotalPrice(data.me.cart)}
               name="Sick Fits"
               description={`Order of ${totalItems(data.me.cart)} items!`}
-              image={data.me.cart.length && data.me.cart[0].item.image}
+              image={data.me.cart.length && data.me.cart[0].item && data.me.cart[0].item.image}
               token={res => this.onToken(res, createOrder)}
             >
               {this.props.children}

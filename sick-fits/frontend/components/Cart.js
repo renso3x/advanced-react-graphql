@@ -44,9 +44,11 @@ const Cart = () => (
           {me.cart.map((cart) => <CartItem key={cart.id} quantity={cart.quantity} cartId={cart.id} item={cart.item} />)}
           <footer>
             <p>{formatMoney(calcTotalPrice(me.cart))}</p>
-            <TakeMyMoney>
-              <SickButton>Checkout</SickButton>
-            </TakeMyMoney>
+            {me.cart.length && (
+              <TakeMyMoney>
+                <SickButton>Checkout</SickButton>
+              </TakeMyMoney>
+            )}
           </footer>
         </CartStyles>
       )
