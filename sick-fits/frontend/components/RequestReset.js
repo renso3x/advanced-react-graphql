@@ -35,7 +35,8 @@ class Reset extends Component {
                 method="post"
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  const res = await requestReset();
+                  await requestReset();
+                  this.setState({ email: '' });
                 }}
               >
                 <Error error={error} />
@@ -66,3 +67,4 @@ class Reset extends Component {
 }
 
 export default Reset;
+export { REQUEST_MUTATION }
