@@ -67,3 +67,4 @@ class RemoveCartitem extends Component {
 
 
 export default RemoveCartitem;
+export { REMOVE_ITEM_MUTATION };

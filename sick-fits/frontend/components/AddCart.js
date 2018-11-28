@@ -28,3 +28,4 @@ const AddCart = ({ id }) => (
 );
 
 export default AddCart;
+export { ADD_TO_CART_MUTATION };
