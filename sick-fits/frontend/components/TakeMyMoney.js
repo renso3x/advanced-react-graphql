@@ -12,6 +12,12 @@ const CREATE_ORDER_MUTATION = gql`
   mutation CREATE_ORDER_MUTATION($token: String!) {
     createOrder(token: $token) {
       id
+      charge
+      total
+      items {
+        id 
+        title
+      }
     }
   }
 `;
@@ -37,27 +43,29 @@ class TakeMyMoney extends React.Component {
   }
   render() {
     return (<User>
-      {({ data }, loading) => (
-        <Mutation
+      {({ data: { me }, loading }) => {
+        if (loading) return null;
+        return (<Mutation
           mutation={CREATE_ORDER_MUTATION}
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
           {(createOrder) => (
             <StripeCheckout
               stripeKey="pk_test_Y8O6nOLfQUNoKNPz5o4BNxXz"
-              amount={calcTotalPrice(data.me.cart)}
+              amount={calcTotalPrice(me.cart)}
               name="Sick Fits"
-              description={`Order of ${totalItems(data.me.cart)} items!`}
-              image={data.me.cart.length && data.me.cart[0].item && data.me.cart[0].item.image}
+              description={`Order of ${totalItems(me.cart)} items!`}
+              image={me.cart.length && me.cart[0].item && me.cart[0].item.image}
               token={res => this.onToken(res, createOrder)}
             >
               {this.props.children}
             </StripeCheckout>
           )}
-        </Mutation>
-      )}
+        </Mutation>);
+      }}
     </User>)
   }
 }
 
-export default TakeMyMoney
+export default TakeMyMoney;
+export { CREATE_ORDER_MUTATION };

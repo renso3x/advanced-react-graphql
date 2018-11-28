@@ -20,6 +20,7 @@ const CURRENT_USER_QUERY = gql`
           image
           price
           title
+          description
         }
       }
     }
@@ -27,7 +28,7 @@ const CURRENT_USER_QUERY = gql`
 `;
 
 const User = (props) => (
-  <Query query={CURRENT_USER_QUERY}>
+  <Query {...props} query={CURRENT_USER_QUERY}>
     {payload => props.children(payload)}
   </Query>
 );
