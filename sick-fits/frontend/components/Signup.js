@@ -17,7 +17,6 @@ const SIGNUP_MUTATION = gql`
     ) {
       name
       email 
-      password
     }
   }
 `
@@ -99,3 +98,4 @@ class Signup extends Component {
 }
 
 export default Signup;
+export { SIGNUP_MUTATION };
