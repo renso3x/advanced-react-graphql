@@ -17,7 +17,7 @@ class RequestReset extends Component {
     email: '',
   };
   saveToState = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.nkme]: e.target.value });
   };
   render() {
     return (

@@ -1,4 +1,4 @@
-import { mount } from 'enzyme';
+kimport { mount } from 'enzyme';
 import toJSON from 'enzyme-to-json';
 import wait from 'waait';
 import SingleItem, { SINGLE_ITEM_QUERY } from '../components/SingleItem';
@@ -18,7 +18,7 @@ describe('<SingleItem/>', () => {
           },
         },
       },
-    ];
+    ];  
     const wrapper = mount(
       <MockedProvider mocks={mocks}>
         <SingleItem id="123" />
